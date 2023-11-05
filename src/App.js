@@ -1,9 +1,21 @@
+import React from 'react';
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+} from 'react-router-dom';
+import ListInvoices from "./components/ListInvoices";
+import CreateInvoice from "./components/CreateInvoice";
+
 function App() {
-  return (
-    <div className="App">
-      Invoicing system !
-    </div>
-  );
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<ListInvoices />} />
+                <Route path="/create" element={<CreateInvoice />} />
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;
