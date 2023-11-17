@@ -1,6 +1,6 @@
-# Bill easy using React
+# Bill Ease using React
 
-This project demonstrates Create/Edit of invoice.
+This project demonstrates Create/Edit of invoices.
 
 ## Installation
 
