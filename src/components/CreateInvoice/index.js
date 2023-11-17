@@ -1,9 +1,26 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useFieldArray, useForm} from "react-hook-form";
-import { InvoiceContainer, Button, ErrorMessage, LineItem, LineItemsContainer, LineInput, Input, Header, Label, Title, TextArea, FieldSet} from "./styles";
+import {
+    InvoiceContainer,
+    Button,
+    ErrorMessage,
+    LineItem,
+    LineItemsContainer,
+    LineInput,
+    Input,
+    Header,
+    Label,
+    Title,
+    TextArea,
+    FieldSet,
+    Footer,
+    Total
+} from "./styles";
 
 const Invoice = () => {
-    const { register, control, handleSubmit, formState: { errors } } = useForm({
+    const [totalPrice, setTotalPrice] = useState(0);
+
+    const { register, control, handleSubmit, formState: { errors }, watch } = useForm({
         defaultValues: {
             lineItems: [{ description: '', quantity: 1, rate: 0 }],
         },
@@ -14,8 +31,17 @@ const Invoice = () => {
         name: 'lineItems',
     });
 
+    const lineItems = watch('lineItems');
+
+    useEffect(() => {
+        const total = lineItems.reduce((acc, item) => acc + (item.quantity || 0) * (item.rate || 0), 0);
+        setTotalPrice(total);
+    }, [lineItems]);
+
     const onSubmit = (data) => {
-        console.log(data);
+        const uniqueID = Date.now();
+        const invoiceData = { ...data, id: uniqueID };
+        localStorage.setItem(`invoice-${uniqueID}`, JSON.stringify(invoiceData));
     };
 
     return (
@@ -32,8 +58,14 @@ const Invoice = () => {
                 </FieldSet>
 
                 <FieldSet>
+                    <Label>Name</Label>
+                    <Input {...register('name', { required: 'Name is required' })} type="text" placeholder="Client name" />
+                    {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
+                </FieldSet>
+
+                <FieldSet>
                     <Label>Bill To</Label>
-                    <TextArea {...register('billTo', { required: 'Billing information is required',  })} placeholder="Client's Name and Address" />
+                    <TextArea {...register('billTo', { required: 'Billing information is required',  })} placeholder="Client's Address" />
                     {errors.billTo && <ErrorMessage>{errors.billTo.message}</ErrorMessage>}
                 </FieldSet>
 
@@ -61,8 +93,12 @@ const Invoice = () => {
                     <Label>Remarks</Label>
                     <TextArea {...register('Remark')} rows="4" />
                 </FieldSet>
-                <Button type="submit">Submit Invoice</Button>
+                <Footer>
+                    <Button type="submit">Submit Invoice</Button>
+                    <Total>Total: ${totalPrice.toFixed(2)}</Total>
+                </Footer>
             </form>
+
         </InvoiceContainer>
     );
 };

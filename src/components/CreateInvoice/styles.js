@@ -90,9 +90,20 @@ const Button = styled.button`
   }
 `;
 
+const Total = styled.div`
+  font-size: 1.2rem;
+  color: ${colors.dark};
+  font-weight: 600;
+`;
+
 const ErrorMessage = styled.span`
   color: red;
   font-size: 0.8rem;
+`;
+
+const Footer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 export {
@@ -107,5 +118,7 @@ export {
     LineItem,
     LineInput,
     Button,
-    ErrorMessage
+    Total,
+    ErrorMessage,
+    Footer
 }
