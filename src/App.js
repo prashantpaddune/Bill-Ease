@@ -13,6 +13,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<ListInvoices />} />
                 <Route path="/create" element={<CreateInvoice />} />
+                <Route path="/edit/:id" element={<CreateInvoice />} />
             </Routes>
         </Router>
     );

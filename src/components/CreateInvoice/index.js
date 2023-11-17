@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import {useFieldArray, useForm} from "react-hook-form";
+import React from 'react';
 import {
     InvoiceContainer,
     Button,
@@ -16,33 +15,19 @@ import {
     Footer,
     Total
 } from "./styles";
+import useGetFormData from "../../hooks/useGetFormData";
 
 const Invoice = () => {
-    const [totalPrice, setTotalPrice] = useState(0);
 
-    const { register, control, handleSubmit, formState: { errors }, watch } = useForm({
-        defaultValues: {
-            lineItems: [{ description: '', quantity: 1, rate: 0 }],
-        },
-    });
-
-    const { fields, append, remove } = useFieldArray({
-        control,
-        name: 'lineItems',
-    });
-
-    const lineItems = watch('lineItems');
-
-    useEffect(() => {
-        const total = lineItems.reduce((acc, item) => acc + (item.quantity || 0) * (item.rate || 0), 0);
-        setTotalPrice(total);
-    }, [lineItems]);
-
-    const onSubmit = (data) => {
-        const uniqueID = Date.now();
-        const invoiceData = { ...data, id: uniqueID };
-        localStorage.setItem(`invoice-${uniqueID}`, JSON.stringify(invoiceData));
-    };
+    const {
+        totalPrice = '',
+        register = () => {},
+        handleSubmit = () => {},
+        errors = {},
+        fields = [],
+        append = () => {},
+        onSubmit = () => {},
+    } = useGetFormData();
 
     return (
         <InvoiceContainer>
